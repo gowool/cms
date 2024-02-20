@@ -8,6 +8,7 @@ import (
 type SiteService interface {
 	CreateLocalhost() Site
 	Save(ctx context.Context, site *Site) error
+	GetByID(ctx context.Context, id int64) (Site, error)
 	GetByHost(ctx context.Context, host string) ([]Site, error)
 	GetAll(ctx context.Context) ([]Site, error)
 }
@@ -35,6 +36,10 @@ func (s siteService) Save(ctx context.Context, site *Site) error {
 		return s.storage.Update(ctx, site)
 	}
 	return s.storage.Create(ctx, site)
+}
+
+func (s siteService) GetByID(ctx context.Context, id int64) (Site, error) {
+	return s.storage.FindByID(ctx, id)
 }
 
 func (s siteService) GetByHost(ctx context.Context, host string) ([]Site, error) {

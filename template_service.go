@@ -6,6 +6,7 @@ import (
 )
 
 type TemplateService interface {
+	GetByID(ctx context.Context, id int64) (Template, error)
 	GetByCode(ctx context.Context, code string) (Template, error)
 	IsFresh(ctx context.Context, code string, t int64) (bool, error)
 	Exists(ctx context.Context, code string) (bool, error)
@@ -17,6 +18,10 @@ type templateService struct {
 
 func NewTemplateService(storage TemplateStorage) TemplateService {
 	return templateService{storage: storage}
+}
+
+func (s templateService) GetByID(ctx context.Context, id int64) (Template, error) {
+	return s.storage.FindByID(ctx, id)
 }
 
 func (s templateService) GetByCode(ctx context.Context, name string) (Template, error) {

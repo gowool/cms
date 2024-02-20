@@ -10,6 +10,7 @@ import (
 type PageService interface {
 	CreateWithDefaults(ctx context.Context, defaults map[string]interface{}) (Page, error)
 	Save(ctx context.Context, page *Page) error
+	GetByID(ctx context.Context, id int64) (Page, error)
 	GetByURL(ctx context.Context, siteID int64, url string) (Page, error)
 	GetByRouteName(ctx context.Context, siteID int64, routeName string) (Page, error)
 	GetByPageAlias(ctx context.Context, siteID int64, pageAlias string) (Page, error)
@@ -55,6 +56,10 @@ func (s pageService) Save(ctx context.Context, page *Page) error {
 		return s.storage.Update(ctx, page)
 	}
 	return s.storage.Create(ctx, page)
+}
+
+func (s pageService) GetByID(ctx context.Context, id int64) (Page, error) {
+	return s.storage.FindByID(ctx, id)
 }
 
 func (s pageService) GetByURL(ctx context.Context, siteID int64, url string) (Page, error) {
