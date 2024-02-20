@@ -36,9 +36,9 @@ func NewEventPageStorage(storage PageStorage) *EventPageStorage {
 	return &EventPageStorage{
 		partialPageStorage: storage,
 		EventStorage: NewEventStorage[Page](storage, func(p *Page) []string {
-			return buildTags("page", p.ID, p.Name, p.RouteName)
+			return BuildTags("page", p.ID, p.Name, p.RouteName)
 		}, func(ids ...int64) []string {
-			return buildIDs("page", ids...)
+			return BuildTagsByIDs("page", ids...)
 		}),
 		BeforeFindByURL:       StubHook[*FindA3Event[int64, string, time.Time, Page]]{},
 		AfterFindByURL:        StubHook[*FindA3Event[int64, string, time.Time, Page]]{},

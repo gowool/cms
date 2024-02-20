@@ -25,9 +25,9 @@ func NewEventTemplateStorage(storage TemplateStorage) *EventTemplateStorage {
 	return &EventTemplateStorage{
 		partialTemplateStorage: storage,
 		EventStorage: NewEventStorage[Template](storage, func(t *Template) []string {
-			return buildTags("template", t.ID, t.Code)
+			return BuildTags("template", t.ID, t.Code)
 		}, func(ids ...int64) []string {
-			return buildIDs("template", ids...)
+			return BuildTagsByIDs("template", ids...)
 		}),
 		BeforeFindByCode: StubHook[*FindA2Event[string, time.Time, Template]]{},
 		AfterFindByCode:  StubHook[*FindA2Event[string, time.Time, Template]]{},

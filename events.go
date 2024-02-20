@@ -11,7 +11,14 @@ type SaveEvent[T any] struct {
 	tags  []string
 }
 
-func (e SaveEvent[T]) Tags() []string {
+func NewSaveEvent[T any](model T, tags ...string) *SaveEvent[T] {
+	return &SaveEvent[T]{
+		Model: model,
+		tags:  tags,
+	}
+}
+
+func (e *SaveEvent[T]) Tags() []string {
 	return e.tags
 }
 
@@ -20,7 +27,14 @@ type DeleteEvent struct {
 	tags []string
 }
 
-func (e DeleteEvent) Tags() []string {
+func NewDeleteEvent(ids []int64, tags ...string) *DeleteEvent {
+	return &DeleteEvent{
+		IDs:  ids,
+		tags: tags,
+	}
+}
+
+func (e *DeleteEvent) Tags() []string {
 	return e.tags
 }
 
@@ -62,7 +76,7 @@ type FindA3Event[A1, A2, A3, R any] struct {
 	Result R
 }
 
-func buildTags(name string, id int64, data ...string) []string {
+func BuildTags(name string, id int64, data ...string) []string {
 	tags := make([]string, 0, len(data)+2)
 	tags = append(tags, name)
 
@@ -79,7 +93,7 @@ func buildTags(name string, id int64, data ...string) []string {
 	return tags
 }
 
-func buildIDs(name string, data ...int64) []string {
+func BuildTagsByIDs(name string, data ...int64) []string {
 	tags := make([]string, 0, len(data)+1)
 	tags = append(tags, name)
 

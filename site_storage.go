@@ -28,9 +28,9 @@ func NewEventSiteStorage(storage SiteStorage) *EventSiteStorage {
 	return &EventSiteStorage{
 		partialSiteStorage: storage,
 		EventStorage: NewEventStorage[Site](storage, func(s *Site) []string {
-			return buildTags("site", s.ID, s.Name)
+			return BuildTags("site", s.ID, s.Name)
 		}, func(ids ...int64) []string {
-			return buildIDs("site", ids...)
+			return BuildTagsByIDs("site", ids...)
 		}),
 		BeforeFindByHosts: StubHook[*FindA2Event[[]string, time.Time, []Site]]{},
 		AfterFindByHosts:  StubHook[*FindA2Event[[]string, time.Time, []Site]]{},
