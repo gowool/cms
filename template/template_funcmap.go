@@ -1,10 +1,12 @@
-package http
+package template
 
 import (
 	"fmt"
 	"html"
 	"html/template"
 	"strings"
+
+	"github.com/gowool/cms/http"
 )
 
 type funcMap struct{}
@@ -25,7 +27,7 @@ func (fm funcMap) FuncMap() template.FuncMap {
 	}
 }
 
-func (fm funcMap) titleTag(seo PageSEO) template.HTML {
+func (fm funcMap) titleTag(seo http.PageSEO) template.HTML {
 	return template.HTML(
 		fmt.Sprintf(
 			"<title>%s</title>",
@@ -34,7 +36,7 @@ func (fm funcMap) titleTag(seo PageSEO) template.HTML {
 	)
 }
 
-func (fm funcMap) metaTags(seo PageSEO) template.HTML {
+func (fm funcMap) metaTags(seo http.PageSEO) template.HTML {
 	normalize := func(s string) string {
 		return EscapeDoubleQuotes(StripTags(s))
 	}
@@ -56,15 +58,15 @@ func (fm funcMap) metaTags(seo PageSEO) template.HTML {
 	return template.HTML(b.String())
 }
 
-func (fm funcMap) htmlAttrs(seo PageSEO) template.HTML {
+func (fm funcMap) htmlAttrs(seo http.PageSEO) string {
 	return fm.attrs(seo.HTMLAttributes())
 }
 
-func (fm funcMap) headAttrs(seo PageSEO) template.HTML {
+func (fm funcMap) headAttrs(seo http.PageSEO) string {
 	return fm.attrs(seo.HeadAttributes())
 }
 
-func (fm funcMap) attrs(attrs map[string]string) template.HTML {
+func (fm funcMap) attrs(attrs map[string]string) string {
 	var b strings.Builder
 	for name, value := range attrs {
 		b.WriteString(name)
@@ -72,17 +74,17 @@ func (fm funcMap) attrs(attrs map[string]string) template.HTML {
 		b.WriteString(html.EscapeString(value))
 		b.WriteString(`" `)
 	}
-	return template.HTML(strings.TrimRight(b.String(), " "))
+	return strings.TrimRight(b.String(), " ")
 }
 
-func (fm funcMap) linkCanonical(seo PageSEO) template.HTML {
+func (fm funcMap) linkCanonical(seo http.PageSEO) template.HTML {
 	if seo.LinkCanonical() != "" {
 		return template.HTML(fmt.Sprintf(`<link rel="canonical" href="%s" />`, html.EscapeString(seo.LinkCanonical())))
 	}
 	return ""
 }
 
-func (fm funcMap) langAlternates(seo PageSEO) template.HTML {
+func (fm funcMap) langAlternates(seo http.PageSEO) template.HTML {
 	var b strings.Builder
 	for href, hreflang := range seo.LangAlternates() {
 		b.WriteString(`<link rel="alternate" href="`)
@@ -94,7 +96,7 @@ func (fm funcMap) langAlternates(seo PageSEO) template.HTML {
 	return template.HTML(b.String())
 }
 
-func (fm funcMap) oEmbedLinks(seo PageSEO) template.HTML {
+func (fm funcMap) oEmbedLinks(seo http.PageSEO) template.HTML {
 	var b strings.Builder
 	for title, link := range seo.OEmbedLinks() {
 		b.WriteString(`<link rel="alternate" type="application/json+oembed" href="`)
