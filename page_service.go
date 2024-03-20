@@ -2,9 +2,10 @@ package cms
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 type PageService interface {
