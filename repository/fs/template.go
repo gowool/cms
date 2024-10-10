@@ -44,8 +44,10 @@ func (t Template) Model() (model.Template, error) {
 	}
 
 	created := t.Info.ModTime()
+
+	//nolint:all
 	if stat, ok := t.Info.Sys().(*syscall.Stat_t); ok {
-		created = time.Unix(stat.Ctimespec.Sec, stat.Ctimespec.Nsec) //nolint:all
+		created = time.Unix(stat.Ctimespec.Sec, stat.Ctimespec.Nsec)
 	}
 
 	return model.Template{
