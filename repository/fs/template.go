@@ -11,7 +11,6 @@ import (
 	"sort"
 	"strings"
 	"sync"
-	"syscall"
 	"time"
 
 	"github.com/gowool/cr"
@@ -43,20 +42,13 @@ func (t Template) Model() (model.Template, error) {
 		return model.Template{}, err
 	}
 
-	created := t.Info.ModTime()
-
-	//nolint:all
-	if stat, ok := t.Info.Sys().(*syscall.Stat_t); ok {
-		created = time.Unix(stat.Ctimespec.Sec, stat.Ctimespec.Nsec)
-	}
-
 	return model.Template{
 		ID:      t.ID(),
 		Name:    t.Name(),
 		Content: internal.String(content),
 		Type:    model.TemplateFS,
 		Enabled: true,
-		Created: created,
+		Created: fileCreated(t.Info),
 		Updated: t.Info.ModTime(),
 	}, nil
 }
