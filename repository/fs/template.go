@@ -10,7 +10,6 @@ import (
 	"slices"
 	"sort"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/gowool/cr"
@@ -57,7 +56,6 @@ type TemplateRepository struct {
 	repository.Template
 	ext  string
 	fs   fs.FS
-	mu   sync.RWMutex
 	data map[string]model.Template
 }
 
@@ -263,9 +261,8 @@ func (r *TemplateRepository) walk() ([]*Template, error) {
 	}); err != nil {
 		return nil, err
 	}
-	slices.Clip(templates)
 
-	return templates, nil
+	return slices.Clip(templates), nil
 }
 
 func sortBy(templates []model.Template, sBy cr.SortBy) {

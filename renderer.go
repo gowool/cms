@@ -4,7 +4,6 @@ import (
 	"errors"
 	"io"
 	"maps"
-	neturl "net/url"
 
 	"github.com/gowool/theme"
 	"github.com/labstack/echo/v4"
@@ -45,8 +44,7 @@ func (renderer *Renderer) Render(w io.Writer, template string, data any, c echo.
 		return errors.New("renderer: configuration not found")
 	}
 
-	var url neturl.URL
-	url = *r.URL
+	url := *r.URL
 	url.User = nil
 	ctx = WithURL(ctx, url)
 
